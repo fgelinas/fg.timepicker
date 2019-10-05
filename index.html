@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+<head>
+    <title>FGelinas Timepicker 2019</title>
+
+    <script src="fg.timepicker.js"></script>
+    <link type="text/css" href="fg.timepicker.css" />
+    <link type="text/css" href="page.css" />
+</head>
+<body>
+    <div id="header">
+        <h1>
+            Another Javascript Timepicker by François Gélinas
+        </h1>
+        <h2>
+            Why?
+        </h2>
+        <p>
+            So this is 2019 and I the game has changed but I still feel there is a missing solution for timepickers.
+            Also i'm using this new project for <a href="https://hacktoberfest.digitalocean.com/">Hacktoberfest</a>.
+            This implementation of the timepicker is completely vanilla and have no dependencies.
+        </p>
+    </div>
+
+    <div id="examples">
+
+        <div class="example">
+            Example 1 : inline timepicker with events
+            <div id="e1_inline">
+
+
+
+            </div>
+
+
+
+            <div id="e1_logs">
+
+
+            </div>
+
+
+            <script id="e1_script">
+                e1TP = new fg.Timepicker({
+                    bindContainer: '#e1_inline',
+                    onTimeChange: function() {
+                        alert('time changed : ' + e1TP.getTime())
+                    }
+
+                });
+            </script>
+
+        </div>
+
+    </div>
+</body>
+</html>
