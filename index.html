@@ -3,6 +3,7 @@
 <head>
     <title>FGelinas Timepicker 2019</title>
 
+    <meta charset="UTF-8" />
     <script src="fg.timepicker.js"></script>
     <link type="text/css" href="fg.timepicker.css" />
     <link type="text/css" href="page.css" />
@@ -42,7 +43,7 @@
 
             <script id="e1_script">
                 e1TP = new fg.Timepicker({
-                    bindContainer: '#e1_inline',
+                    bindContainer: document.getElementById('e1_inline'),
                     onTimeChange: function() {
                         alert('time changed : ' + e1TP.getTime())
                     }

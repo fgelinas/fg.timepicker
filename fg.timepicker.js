@@ -24,12 +24,16 @@ fg.Time = function Time(hour, minute) {
 fg.Timepicker = function Timepicker(options) {
 
     // init hour and minutes to current time
-    var now = new Date();
+    let now = new Date();
     // the currently selected hour
-    var hour = now.getHours(); 
+    let hour = options.hour ? options.hour : now.getHours();
     // the currently selected minute
-    var minute = now.getMinutes();
+    let minute = options.minute ? options.minute : now.getMinutes();
 
+    let mainElementClass = "fgtp";
+
+    // pointer to the dom element build to show the timepicker
+    let domEl = null;
 
 
     /**
@@ -37,25 +41,25 @@ fg.Timepicker = function Timepicker(options) {
      * The timepicker can be one and only one of the 3 : input, button or container
      */
     // bindInput is the text box bound to the timepicker for value and popup
-    var bindInput = null;
+    let bindInput = options.bindInput ? options.bindInput : null;
     // define if the timepicker pops up automatically on focus or not
-    var autoPopup = true;
+    let autoPopup = options.autoPopup ? options.autoPopup : true;
     // TODO: show the timepicker when this button is clicked
-    var bindButton = null;
+    let bindButton = options.bindButton ? options.bindButton : null;
     // show the timepicker inline in this container
-    var bindContainer = null;
+    let bindContainer = options.bindContainer ? options.bindContainer : null;
 
     // events 
-    this.onHourChange = null;
+    this.onHourChange = options.onHourChange ? options.onHourChange : null;
     this.onMinuteChange = null;
-    this.onTimeChange = null;
+    this.onTimeChange = options.onTimeChange ? options.onTimeChange : null;
     this.onShow = null;
     this.onHide = null;
     this.onRedraw = null;
 
 
     // internal to keep track of visibility of the timepicker
-    var visile = false; 
+    let visible = false;
 
     // === getter and setters ===
     this.getHour = function getHour() {
@@ -82,8 +86,39 @@ fg.Timepicker = function Timepicker(options) {
 
     this.getFormattedTime = function() {
         return this.getHour() + ":" + this.getMinute();
-    }
+    };
 
+
+    /**
+     * Private functions
+     */
+    let e = function createElement(nameTag, className) {
+        let e = document.createElement(nameTag);
+        e.className = className;
+        return e;
+    };
+
+    let buildDomElements = function buildDomElements() {
+
+        // TODO: Cleanup
+        domEl = null;
+
+        domEl = document.createElement('div', mainElementClass);
+
+        let p = e('p');
+        p.innerHTML = "Hello my coconut";
+        domEl.appendChild(p);
+
+
+        return domEl;
+    };
+
+
+
+    // end of initialisation
+    if (bindContainer) {
+        bindContainer.appendChild(buildDomElements());
+    }
 };
 
 
