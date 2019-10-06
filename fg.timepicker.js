@@ -132,10 +132,25 @@ fg.Timepicker = function Timepicker(options) {
         // todo: make the h4 configurable
         hoursTitle = e('h4', 'title', hoursBlock, 'Hours');
         let amBlock = e('div','am-block', hoursBlock); // TODO: add localisation
+
         let amTitle = e('h5', 'am-title', amBlock, 'AM');
-        for (let i = 0; i < 12; i++) {
-            let b = e('div', 'hour-unit', amBlock, i);
+
+        let amUnitContainer = e('div', 'am-unit-container', amBlock);
+
+        for (let i = 0; i < 6; i++) {
+            let b = e('div', 'hour-unit', amUnitContainer, i);
+            if (i === 0) {
+                b.innerText = '12'; // TODO: use 24 for 24hour display
+            }
         }
+        for (let i = 6; i < 12; i++) {
+            let b = e('div', 'hour-unit', amUnitContainer, i);
+            if (i === 0) {
+                b.innerText = '12'; // TODO: use 24 for 24hour display
+            }
+        }
+
+        /*
         let pmBlock = e('div','pm-block', hoursBlock); // TODO: add localisation
         let pmTitle = e('h5', 'pm-title', amBlock, 'PM');
         for (let i = 13; i < 24; i++) {
@@ -145,6 +160,7 @@ fg.Timepicker = function Timepicker(options) {
         minutesBlock = e('div', 'minutes', domEl);
         minutesTitle = e('h4', 'title', minutesBlock, 'Minutes');
         e('div', 'minutes-content', minutesBlock, 'Hello in minute');
+        */
         return domEl;
     };
 
