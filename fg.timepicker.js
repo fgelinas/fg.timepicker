@@ -92,24 +92,59 @@ fg.Timepicker = function Timepicker(options) {
     /**
      * Private functions
      */
-    let e = function createElement(nameTag, className) {
+    // create element helper function
+    let e = function createElement(nameTag, className, bindToParent, innerHTML) {
         let e = document.createElement(nameTag);
-        e.className = className;
+        if (className) {
+            e.className = className;
+        }
+        if (bindToParent) {
+            bindToParent.appendChild(e);
+        }
+
+        if (innerHTML) {
+            e.innerHTML = innerHTML;
+        }
+
         return e;
     };
 
-    let buildDomElements = function buildDomElements() {
+    /**
+     * Build the DOM for the timepicker
+     * @returns HTMLElement
+     */
+    let buildTPDom = function buildTPDom() {
 
-        // TODO: Cleanup
+        // TODO: Cleanup - possibly it will be better to affect to domEl after the new dom is built
         domEl = null;
 
-        domEl = document.createElement('div', mainElementClass);
-
-        let p = e('p');
-        p.innerHTML = "Hello my coconut";
-        domEl.appendChild(p);
+        domEl = e('div', mainElementClass);
 
 
+
+
+
+        hoursBlock = e('div', 'hours', domEl);
+
+        let amPm = ['am', 'pm'];
+
+
+        // todo: make the h4 configurable
+        hoursTitle = e('h4', 'title', hoursBlock, 'Hours');
+        let amBlock = e('div','am-block', hoursBlock); // TODO: add localisation
+        let amTitle = e('h5', 'am-title', amBlock, 'AM');
+        for (let i = 0; i < 12; i++) {
+            let b = e('div', 'hour-unit', amBlock, i);
+        }
+        let pmBlock = e('div','pm-block', hoursBlock); // TODO: add localisation
+        let pmTitle = e('h5', 'pm-title', amBlock, 'PM');
+        for (let i = 13; i < 24; i++) {
+            let b = e('div', 'hour-unit', pmBlock, i);
+        }
+
+        minutesBlock = e('div', 'minutes', domEl);
+        minutesTitle = e('h4', 'title', minutesBlock, 'Minutes');
+        e('div', 'minutes-content', minutesBlock, 'Hello in minute');
         return domEl;
     };
 
@@ -117,7 +152,7 @@ fg.Timepicker = function Timepicker(options) {
 
     // end of initialisation
     if (bindContainer) {
-        bindContainer.appendChild(buildDomElements());
+        bindContainer.appendChild(buildTPDom());
     }
 };
 

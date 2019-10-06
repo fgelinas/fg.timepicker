@@ -1,0 +1,15 @@
+.fgtp {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    align-content: flex-start;
+
+    border: 1px solid gray;
+}
+
+.hour-unit {
+    flex-grow: 1;
+
+}
