@@ -5,11 +5,42 @@
     justify-content: flex-start;
     align-items: stretch;
     align-content: flex-start;
-
     border: 1px solid gray;
 }
 
-.hour-unit {
-    flex-grow: 1;
+.fgtp .am-block {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+}
 
+.fgtp .am-block .am-title {
+    align-self: center;
+    text-align: center;
+    margin: 0;
+    padding: 0 10px;
+}
+
+.fgtp .am-unit-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    width: calc(48px * 6);
+    font-size: 18px;
+}
+
+.fgtp .hour-unit {
+    text-align: center;
+    flex-grow: 0;
+    flex-basis: calc(100% / 6 - 2px);
+    line-height: 48px;
+    height: 48px;
+    border: 1px solid red;
+    cursor: pointer;
+}
+
+.fgtp .hour-unit:hover {
+    background: rgba(0,0,0,0.05);
 }
