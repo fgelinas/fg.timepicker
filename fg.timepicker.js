@@ -131,11 +131,11 @@ fg.Timepicker = function Timepicker(options) {
 
         // todo: make the h4 configurable
         hoursTitle = e('h4', 'title', hoursBlock, 'Hours');
-        let amBlock = e('div','am-block', hoursBlock); // TODO: add localisation
+        let amBlock = e('div','hr-block am-block', hoursBlock); // TODO: add localisation
 
-        let amTitle = e('h5', 'am-title', amBlock, 'AM');
+        let amTitle = e('h5', 'hr-title am-title', amBlock, 'AM');
 
-        let amUnitContainer = e('div', 'am-unit-container', amBlock);
+        let amUnitContainer = e('div', 'hr-container am-unit-container', amBlock);
 
         for (let i = 0; i < 6; i++) {
             let b = e('div', 'hour-unit', amUnitContainer, i);
