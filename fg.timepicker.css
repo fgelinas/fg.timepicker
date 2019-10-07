@@ -1,46 +1,95 @@
 .fgtp {
+    position: absolute;
+    top: 0;
+    left: 0;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-start;
     align-items: stretch;
     align-content: flex-start;
-    border: 1px solid gray;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    font-family: inherit;
+    font-size: 16px;
+    color: #444;
+    animation: fgtp-pop .5s ease-out forwards;
+    transform-origin: 20% 5%;
 }
 
-.fgtp .am-block {
+@keyframes fgtp-pop {
+    0% {
+        transform: scale(0);
+    }
+    100% {
+        transform: scale(1.0);
+    }
+}
+
+.fgtp .fgtp-title {
+    margin: 0;
+    padding: 15px 0;
+    background: #222;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: .125em;
+    font-size: inherit;
+    font-weight: normal;
+    text-align: center;
+}
+
+.fgtp .fgtp-hr-block {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     align-items: stretch;
+    background: #fff;
 }
 
-.fgtp .am-block .am-title {
+.fgtp .fgtp-ampm-title {
     align-self: center;
     text-align: center;
     margin: 0;
     padding: 0 10px;
+    color: #999;
+    font-size: inherit;
+    font-weight: normal;
 }
 
-.fgtp .am-unit-container {
+.fgtp .fgtp-unit-container {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     align-content: flex-start;
-    width: calc(48px * 6);
+    width: calc(48px * 6 - 1px);
+    padding: 5px;
+    background: #fff;
     font-size: 18px;
+    border-left: 1px solid #eee;
 }
 
-.fgtp .hour-unit {
+/* width adjustment for minutes unit container, 3 per row instead of 6 */
+.fgtp .fgtp-minutes-unit-container {
+    width: calc(48px * 3 - 1px);
+}
+
+.fgtp .fgtp-unit {
     text-align: center;
     flex-grow: 0;
     flex-basis: calc(100% / 6 - 2px);
     line-height: 48px;
     height: 48px;
-    border: 1px solid red;
+    border: 1px solid transparent;
+    border-radius: 50px;
     cursor: pointer;
+    transition: all ease .3s;
 }
 
-.fgtp .hour-unit:hover {
+/* width adjustment for minutes unit, 3 per row instead of 6 */
+.fgtp .fgtp-minute-unit {
+    flex-basis: calc(100% / 3 - 2px);
+}
+
+.fgtp .fgtp-unit:hover {
     background: rgba(0,0,0,0.05);
+    color: #000;
 }

@@ -84,7 +84,7 @@ fg.Timepicker = function Timepicker(options) {
      * TODO: implement localisation
      */
 
-    this.getFormattedTime = function() {
+    this.getFormattedTime = function getFormattedTime() {
         return this.getHour() + ":" + this.getMinute();
     };
 
@@ -121,46 +121,45 @@ fg.Timepicker = function Timepicker(options) {
         domEl = e('div', mainElementClass);
 
 
+        let hoursBlock = e('div', 'hours', domEl);
 
-
-
-        hoursBlock = e('div', 'hours', domEl);
-
-        let amPm = ['am', 'pm'];
-
+        let amPmList = ['am', 'pm'];
 
         // todo: make the h4 configurable
-        hoursTitle = e('h4', 'title', hoursBlock, 'Hours');
-        let amBlock = e('div','am-block', hoursBlock); // TODO: add localisation
+        let hoursTitle = e('h4', 'fgtp-title', hoursBlock, 'Hours');
 
-        let amTitle = e('h5', 'am-title', amBlock, 'AM');
+        for (let iAmPm = 0; iAmPm <= 1; iAmPm++) {
+            let amPm = amPmList[iAmPm];
+            let amPmBlock = e('div','fgtp-hr-block fgtp-ampm-block', hoursBlock); // TODO: add localisation
 
-        let amUnitContainer = e('div', 'am-unit-container', amBlock);
+            e('h5', 'fgtp-ampm-title', amPmBlock, amPm.toUpperCase());
 
-        for (let i = 0; i < 6; i++) {
-            let b = e('div', 'hour-unit', amUnitContainer, i);
-            if (i === 0) {
-                b.innerText = '12'; // TODO: use 24 for 24hour display
+            let amUnitContainer = e('div', 'fgtp-unit-container fgtp-ampm-unit-container', amPmBlock);
+
+            // Define first and end hour for the am/pm block
+            let firstHour = iAmPm === 0 ? 0 : 12;
+            let endHour = firstHour + 11;
+            for (let i = firstHour; i <= endHour; i++) {
+                let b = e('div', 'fgtp-hour-unit fgtp-unit', amUnitContainer, i);
+                if (i === 0) {
+                    b.innerText = '12'; // TODO: use 24 for 24hour display
+                }
             }
         }
-        for (let i = 6; i < 12; i++) {
-            let b = e('div', 'hour-unit', amUnitContainer, i);
-            if (i === 0) {
-                b.innerText = '12'; // TODO: use 24 for 24hour display
-            }
-        }
 
-        /*
-        let pmBlock = e('div','pm-block', hoursBlock); // TODO: add localisation
-        let pmTitle = e('h5', 'pm-title', amBlock, 'PM');
-        for (let i = 13; i < 24; i++) {
-            let b = e('div', 'hour-unit', pmBlock, i);
-        }
 
         minutesBlock = e('div', 'minutes', domEl);
-        minutesTitle = e('h4', 'title', minutesBlock, 'Minutes');
-        e('div', 'minutes-content', minutesBlock, 'Hello in minute');
-        */
+        minutesTitle = e('h4', 'fgtp-title', minutesBlock, 'Minutes');
+        let minutesUnitContainer = e('div', 'fgtp-unit-container fgtp-minutes-unit-container', minutesBlock);
+
+        // TODO: find a better way to handle minutes to show, more configurable
+        let firstMinute = 0;
+        let endMinute = 55;
+        let step = 5;
+        for (let i = firstMinute; i <= endMinute; i+= step) {
+            e('div', 'fgtp-minute-unit fgtp-unit', minutesUnitContainer, i.toString());
+        }
+
         return domEl;
     };
 
