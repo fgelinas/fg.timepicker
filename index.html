@@ -32,7 +32,7 @@
                 Inline Timepicker with Events
             </h3>
 
-            <div id="e1_inline">
+            <div id="e1_inline" style="float:left">
 
 
 
@@ -40,18 +40,37 @@
 
 
 
-            <div id="e1_logs">
+            <div style="padding: 10px;" >
+                <h3>Events : </h3>
+                <div id="e1_events" style="width: 300px; height:150px; overflow-y: scroll">
+
+                </div>
 
 
             </div>
 
 
             <script id="e1_script">
+                function logEvent(log) {
+                    let e = document.getElementById('e1_events');
+                    e.innerHTML += "<br>" + log;
+                    e.scrollTop = e.scrollHeight;
+                }
                 e1TP = new fg.Timepicker({
                     bindContainer: document.getElementById('e1_inline'),
                     onTimeChange: function() {
-                        alert('time changed : ' + e1TP.getTime())
+                        logEvent('onTimeChange, new time : ' + e1TP.getTime())
+                    },
+                    onHourChange: function() {
+                        logEvent('onHourChange, new hour : ' + e1TP.getHour().toString());
+                    },
+                    onMinuteChange: function() {
+                        logEvent('onMinuteChange, new minute : ' + e1TP.getMinute().toString());
+                    },
+                    onShow: function() {
+                        logEvent('onShow triggered');
                     }
+
 
                 });
             </script>
