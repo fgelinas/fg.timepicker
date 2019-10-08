@@ -1,8 +1,8 @@
 .fgtp {
-    position: absolute;
+    /* position: absolute; */
     top: 0;
     left: 0;
-    display: flex;
+    display: inline-flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-start;
@@ -87,6 +87,10 @@
 /* width adjustment for minutes unit, 3 per row instead of 6 */
 .fgtp .fgtp-minute-unit {
     flex-basis: calc(100% / 3 - 2px);
+}
+
+.fgtp .fgtp-unit.selected {
+    background: rgba(250,0,0,0.05);
 }
 
 .fgtp .fgtp-unit:hover {
