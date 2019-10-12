@@ -89,11 +89,38 @@
     flex-basis: calc(100% / 3 - 2px);
 }
 
-.fgtp .fgtp-unit.selected {
-    background: rgba(250,0,0,0.05);
+.fgtp .fgtp-unit.selected,
+.fgtp .fgtp-unit.selected:hover {
+    background-color: #ff6600;
+    color: #fff;
 }
 
 .fgtp .fgtp-unit:hover {
     background: rgba(0,0,0,0.05);
     color: #000;
+}
+
+@media only screen and (max-width: 600px) {
+
+    .fgtp .fgtp-unit-container {
+        width: calc(42px * 6 - 1px);
+        padding: 2px;
+    }
+
+    .fgtp .fgtp-minutes-unit-container {
+        width: calc(42px * 6 + 3px);
+        padding: 2px 22px;
+    }
+
+    .fgtp .fgtp-unit {
+        text-align: center;
+        flex-grow: 0;
+        flex-basis: calc(100% / 6 - 2px);
+        line-height: 40px;
+        height: 40px;
+    }
+
+    .fgtp .fgtp-minute-unit {
+        flex-basis: calc(100% / 6 - 2px);
+    }
 }
