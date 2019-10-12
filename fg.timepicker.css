@@ -1,8 +1,8 @@
 .fgtp {
-    position: absolute;
+    /* position: absolute; */
     top: 0;
     left: 0;
-    display: flex;
+    display: inline-flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-start;
@@ -12,11 +12,11 @@
     font-family: inherit;
     font-size: 16px;
     color: #444;
-    animation: pop .5s ease-out forwards;
+    animation: fgtp-pop .5s ease-out forwards;
     transform-origin: 20% 5%;
 }
 
-@keyframes pop {
+@keyframes fgtp-pop {
     0% {
         transform: scale(0);
     }
@@ -25,7 +25,7 @@
     }
 }
 
-.fgtp .hours .title {
+.fgtp .fgtp-title {
     margin: 0;
     padding: 15px 0;
     background: #222;
@@ -37,7 +37,7 @@
     text-align: center;
 }
 
-.fgtp .hr-block {
+.fgtp .fgtp-hr-block {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -45,7 +45,7 @@
     background: #fff;
 }
 
-.fgtp .hr-block .hr-title {
+.fgtp .fgtp-ampm-title {
     align-self: center;
     text-align: center;
     margin: 0;
@@ -55,7 +55,7 @@
     font-weight: normal;
 }
 
-.fgtp .hr-container {
+.fgtp .fgtp-unit-container {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -67,7 +67,12 @@
     border-left: 1px solid #eee;
 }
 
-.fgtp .hour-unit {
+/* width adjustment for minutes unit container, 3 per row instead of 6 */
+.fgtp .fgtp-minutes-unit-container {
+    width: calc(48px * 3 - 1px);
+}
+
+.fgtp .fgtp-unit {
     text-align: center;
     flex-grow: 0;
     flex-basis: calc(100% / 6 - 2px);
@@ -79,7 +84,16 @@
     transition: all ease .3s;
 }
 
-.fgtp .hour-unit:hover {
+/* width adjustment for minutes unit, 3 per row instead of 6 */
+.fgtp .fgtp-minute-unit {
+    flex-basis: calc(100% / 3 - 2px);
+}
+
+.fgtp .fgtp-unit.selected {
+    background: rgba(250,0,0,0.05);
+}
+
+.fgtp .fgtp-unit:hover {
     background: rgba(0,0,0,0.05);
     color: #000;
 }
