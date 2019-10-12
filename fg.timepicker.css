@@ -154,7 +154,7 @@
     color: #999;
 }
 
-.fgtp .fgtp-unit-container {
+.fgtp.fgtp-dark .fgtp-unit-container {
     background: #222;
     border-left: 1px solid #444;
 }
