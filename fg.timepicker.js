@@ -32,6 +32,7 @@ fg.Timepicker = function Timepicker(options) {
     let minute = options.minute ? options.minute : now.getMinutes();
 
     let mainElementClass = "fgtp";
+    // TODO: Add parameter for dark theme, which should add the .fgtp-dark to mainElementClass.
 
     // pointer to the dom element build to show the timepicker
     let domEl = null;
