@@ -209,7 +209,9 @@ fg.Timepicker = function Timepicker(options) {
             let minuteUnit = e('div', 'fgtp-minute-unit fgtp-unit', minutesUnitContainer, i.toString());
             minuteUnit.onclick = function() {
                 tpInst.setMinute(i);
-            }
+            };
+            // append to minutesUnits array
+            domMinuteUnits[i] = minuteUnit;
         }
         highlightSelectedMinute();
 
