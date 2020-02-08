@@ -79,7 +79,9 @@ fg.Timepicker = function Timepicker(options) {
         if (this.onHourChange) {
             this.onHourChange.apply();
         }
-
+        if (this.onTimeChange) {
+            this.onTimeChange.apply();
+        }
     };
 
     this.getMinute = function getMinute() {
@@ -91,8 +93,11 @@ fg.Timepicker = function Timepicker(options) {
         if (this.onMinuteChange) {
             this.onMinuteChange.apply();
         }
-
+        if (this.onTimeChange) {
+            this.onTimeChange.apply();
+        }
     };
+
 
     /**
      * function getFormattedTime

@@ -61,7 +61,7 @@
                 e1TP = new fg.Timepicker({
                     bindContainer: document.getElementById('e1_inline'),
                     onTimeChange: function() {
-                        logEvent('onTimeChange, new time : ' + e1TP.getTime())
+                        logEvent('onTimeChange, new time : ' + e1TP.getFormattedTime())
                     },
                     onHourChange: function() {
                         logEvent('onHourChange, new hour : ' + e1TP.getHour().toString());
