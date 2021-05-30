@@ -1,19 +1,19 @@
 <!doctype html>
 <html>
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="initial-scale=1.0">
-
-    <title>Frank JS Timepicker</title>
-
+    <title>François Gélinas FG JS Timepicker</title>
     <script src="fg.timepicker.js"></script>
     <link rel="stylesheet" type="text/css" href="fg.timepicker.css" />
     <link rel="stylesheet" type="text/css" href="page.css" />
 </head>
+
 <body>
     <div id="header">
         <h1>
-            Another Javascript Timepicker by François Gélinas (and Émilie B, and contributors)
+            FG.Timepicker : Another Javascript Timepicker by François Gélinas (and Émilie B, and contributors)
         </h1>
         <h2>
             Why?
@@ -30,29 +30,22 @@
     <div id="examples">
         <h2>Examples</h2>
 
-        <div class="example">
+        <div class="example" id="example_1">
             <h3>
                 <small>Example 1</small>
-                Inline Timepicker with Events
+                Inline Timepicker with Events, linked to textbox by events
             </h3>
-
+            <div>
+                <input type="text" id="e1_input">
+            </div>
             <div id="e1_inline" style="float:left">
-
-
-
             </div>
 
-
-
-            <div style="padding: 10px;" >
+            <div style="padding: 10px;">
                 <h3>Events : </h3>
                 <div id="e1_events" style="width: 300px; height:150px; overflow-y: scroll">
-
                 </div>
-
-
             </div>
-
 
             <script id="e1_script">
                 function logEvent(log) {
@@ -62,25 +55,30 @@
                 }
                 e1TP = new fg.Timepicker({
                     bindContainer: document.getElementById('e1_inline'),
-                    onTimeChange: function() {
-                        logEvent('onTimeChange, new time : ' + e1TP.getFormattedTime())
+                    bindInput: document.getElementById('e1_input'),
+                    onTimeChange: function () {
+                        logEvent('onTimeChange, new time formatted : ' + e1TP.getFormattedTime())
                     },
-                    onHourChange: function() {
+                    onHourChange: function () {
                         logEvent('onHourChange, new hour : ' + e1TP.getHour().toString());
                     },
-                    onMinuteChange: function() {
+                    onMinuteChange: function () {
                         logEvent('onMinuteChange, new minute : ' + e1TP.getMinute().toString());
                     },
-                    onShow: function() {
+                    onShow: function () {
                         logEvent('onShow triggered');
                     }
-
-
                 });
             </script>
+        </div>
+
+        <div class="example" id="example_2">
 
         </div>
 
     </div>
+
+
 </body>
+
 </html>

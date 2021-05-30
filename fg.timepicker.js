@@ -10,7 +10,7 @@
 
 var fg = fg || {};
 
-fg.log = fg.log || function log(log){
+fg.log = fg.log || function log(log) {
     if (console) {
         console.log(log);
     }
@@ -18,7 +18,7 @@ fg.log = fg.log || function log(log){
 
 // a basic time object
 fg.Time = function Time(hour, minute) {
-    
+
 };
 
 fg.Timepicker = function Timepicker(options) {
@@ -44,10 +44,10 @@ fg.Timepicker = function Timepicker(options) {
 
 
     /**
-     * binding and popup settings
+     * processing option settings
      * The timepicker can be one and only one of the 3 : input, button or container
      */
-    // bindInput is the text box bound to the timepicker for value and popup
+    // bindInput is the text box HTMLInputElement bound to the timepicker for value and popup
     let bindInput = options.bindInput ? options.bindInput : null;
     // define if the timepicker pops up automatically on focus or not
     let autoPopup = options.autoPopup ? options.autoPopup : true;
@@ -55,6 +55,14 @@ fg.Timepicker = function Timepicker(options) {
     let bindButton = options.bindButton ? options.bindButton : null;
     // show the timepicker inline in this container
     let bindContainer = options.bindContainer ? options.bindContainer : null;
+    // time options 
+    // timeSeparator : string that seperate hours and minutes
+    let timeSeparator = options.timeSeparator ? options.timeSeparator : ":"
+    // showHours
+    let showHours = options.showHours ? options.showHours : true;
+    // showMinutes
+    let showMinutes = options.showMinutes ? options.showMinutes : true;
+
 
     // events
     // TODO: find a better way to affect all options to the instance object.
@@ -75,13 +83,8 @@ fg.Timepicker = function Timepicker(options) {
     };
     this.setHour = function setHour(newHour) {
         hour = newHour;
-        highlightSelectedHour();
-        if (this.onHourChange) {
-            this.onHourChange.apply();
-        }
-        if (this.onTimeChange) {
-            this.onTimeChange.apply();
-        }
+        hourChangedEvent();
+        timeChangedEvent();
     };
 
     this.getMinute = function getMinute() {
@@ -89,15 +92,18 @@ fg.Timepicker = function Timepicker(options) {
     };
     this.setMinute = function setMinute(newMinute) {
         minute = newMinute;
-        highlightSelectedMinute();
-        if (this.onMinuteChange) {
-            this.onMinuteChange.apply();
-        }
-        if (this.onTimeChange) {
-            this.onTimeChange.apply();
-        }
+        minuteChangedEvent();
+        timeChangedEvent();
     };
 
+    this.setTime = function setTime(newHour, newMinute) {
+        hour = newHour;
+        minute = newMinute;
+        hourChangedEvent();
+        minuteChangedEvent();
+        timeChangedEvent();
+
+    }
 
     /**
      * function getFormattedTime
@@ -106,15 +112,86 @@ fg.Timepicker = function Timepicker(options) {
      */
 
     this.getFormattedTime = function getFormattedTime() {
-        return this.getHour() + ":" + this.getMinute();
+        return this.getHour() + timeSeparator + this.getMinute();
     };
 
+    /**
+     * Parse given time string, return an object with hours and minutes.
+     * This function is not string, it will find any two number seperated by a string
+     * 
+     * The function will use instance time configuration properties to better interpret time.
+     */
+    this.parseTime = function parseTime(timeVal) {
+        var retVal = new Object();
+        retVal.hour = -1;
+        retVal.minute = -1;
+
+        if (!timeVal)
+            return retVal;
+
+
+        // first search for time seperator in string
+        let p = timeVal.indexOf(timeSeparator);
+        // check if time separator found
+        if (p != -1) {
+            retVal.hour = parseInt(timeVal.substr(0, p), 10);
+            retVal.minute = parseInt(timeVal.substr(p + 1), 10);
+        }
+
+        // check for hours only
+        else if (showHours && !showMinutes) {
+            retVal.hour = parseInt(timeVal, 10);
+        }
+        // check for minutes only
+        else if (!showHours && showMinutes) {
+            retVal.minute = parseInt(timeVal, 10);
+        }
+        /*
+                if (showHours) {
+                    var timeValUpper = timeVal.toUpperCase();
+                    if ((retVal.hours < 12) && (showPeriod) && (timeValUpper.indexOf(amPmText[1].toUpperCase()) != -1)) {
+                        retVal.hours += 12;
+                    }
+                    // fix for 12 AM
+                    if ((retVal.hours == 12) && (showPeriod) && (timeValUpper.indexOf(amPmText[0].toUpperCase()) != -1)) {
+                        retVal.hours = 0;
+                    }
+                }
+        */
+        return retVal;
+    };
+
+    // force redraw of the timepicker
+    this.redraw = function redraw() {
+
+    }
 
     /**
      * Private functions
      */
 
-    let highlightSelectedHour = function() {
+    let hourChangedEvent = function () {
+        highlightSelectedHour();
+        if (tpInst.onHourChange) {
+            tpInst.onHourChange.apply();
+        }
+    }
+    let minuteChangedEvent = function () {
+        highlightSelectedMinute();
+        if (tpInst.onMinuteChange) {
+            tpInst.onMinuteChange.apply();
+        }
+    }
+    let timeChangedEvent = function () {
+        if (tpInst.onTimeChange) {
+            tpInst.onTimeChange.apply();
+        }
+        if (bindInput) {
+            bindInput.value = tpInst.getFormattedTime();
+        }
+    }
+
+    let highlightSelectedHour = function () {
         domHourUnits.forEach((unit, hour) => {
             if (hour === tpInst.getHour()) {
                 unit.classList.add('selected');
@@ -124,7 +201,7 @@ fg.Timepicker = function Timepicker(options) {
         });
     };
 
-    let highlightSelectedMinute = function() {
+    let highlightSelectedMinute = function () {
         domMinuteUnits.forEach((unit, minute) => {
             if (minute === tpInst.getMinute()) {
                 unit.classList.add('selected');
@@ -156,10 +233,9 @@ fg.Timepicker = function Timepicker(options) {
      */
     let buildTPDom = function buildTPDom() {
 
-        // TODO: Cleanup - possibly it will be better to affect to domEl after the new dom is built
-        domEl = e('div', mainElementClass);
+        let newDomEl = e('div', mainElementClass);
 
-        let hoursBlock = e('div', 'hours', domEl);
+        let hoursBlock = e('div', 'hours', newDomEl);
 
         let amPmList = ['am', 'pm'];
 
@@ -171,7 +247,7 @@ fg.Timepicker = function Timepicker(options) {
 
         for (let iAmPm = 0; iAmPm <= 1; iAmPm++) {
             let amPm = amPmList[iAmPm];
-            let amPmBlock = e('div','fgtp-hr-block fgtp-ampm-block', hoursBlock); // TODO: add localisation
+            let amPmBlock = e('div', 'fgtp-hr-block fgtp-ampm-block', hoursBlock); // TODO: add localisation
 
             e('h5', 'fgtp-ampm-title', amPmBlock, amPm.toUpperCase());
 
@@ -195,7 +271,7 @@ fg.Timepicker = function Timepicker(options) {
         }
         highlightSelectedHour();
 
-        minutesBlock = e('div', 'minutes', domEl);
+        minutesBlock = e('div', 'minutes', newDomEl);
         minutesTitle = e('h4', 'fgtp-title', minutesBlock, 'Minutes');
         let minutesUnitContainer = e('div', 'fgtp-unit-container fgtp-minutes-unit-container', minutesBlock);
 
@@ -205,9 +281,9 @@ fg.Timepicker = function Timepicker(options) {
         let firstMinute = 0;
         let endMinute = 55;
         let step = 5;
-        for (let i = firstMinute; i <= endMinute; i+= step) {
+        for (let i = firstMinute; i <= endMinute; i += step) {
             let minuteUnit = e('div', 'fgtp-minute-unit fgtp-unit', minutesUnitContainer, i.toString());
-            minuteUnit.onclick = function() {
+            minuteUnit.onclick = function () {
                 tpInst.setMinute(i);
             };
             // append to minutesUnits array
@@ -215,7 +291,18 @@ fg.Timepicker = function Timepicker(options) {
         }
         highlightSelectedMinute();
 
+        domEl = newDomEl;
+
         return domEl;
+    };
+
+    let inputChangeHandle = function () {
+        console.log("bindInput text changed to " + bindInput.value);
+
+        newTime = tpInst.parseTime(bindInput.value);
+        console.log('new Time : ');
+        console.log(newTime);
+        tpInst.setTime(newTime.hour, newTime.minute);
     };
 
 
@@ -228,9 +315,14 @@ fg.Timepicker = function Timepicker(options) {
         if (this.onShow) { this.onShow.apply(); }
     }
 
+    if (bindInput) {
+        console.log(bindInput)
+
+        bindInput.addEventListener('change', inputChangeHandle);
+    }
+
     return this;
 };
 
 
 
- 
