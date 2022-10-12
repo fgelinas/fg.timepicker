@@ -37,13 +37,14 @@
                 Inline Timepicker with Events, linked to textbox by events
             </h3>
             <div style="float: left;">
-                <div>
-                    <input type="text" id="e1_input">
-                </div>
                 <div id="e1_inline">
                 </div>
             </div>
             <div style="padding-left: 10px; float: left;">
+                <div>
+                <input type="text" id="e1_input">
+                </div>
+                
                 <h3>Events : </h3>
                 <div id="e1_events" style="width: 400px; height:200px; overflow-y: scroll; border: 1px solid grey">
                 </div>
@@ -75,27 +76,34 @@
             </script>
         </div>
 
-        <div class="example" id="e4_std_input">
+        <div class="example" id="e2_std_input">
             <h3>Example with a normal input and display the timepicker in a popup</h3>
 
-            <input type="text" id="e4_input">
+            <input type="text" id="e2_input">
 
+            <div>
+            
+                <input type="checkbox" id="e2_animatePopup" value="false">
+                <label for="e2_animatePopup">Animate popup</label>
+            </div>
             <script>
-                e4TP = new fg.Timepicker({
-                    bindInput: document.getElementById('e4_input')
+                
+                e2TP = new fg.Timepicker({
+                    bindInput: document.getElementById('e2_input'),
+                    animatePopup: true
                 });
             </script>
         </div>
 
-        <div class="example" id="e2_custom_start_end">
+        <div class="example" id="e3_custom_start_end">
             <h3>Example with custom hours and minutes choices</h3>
 
-            <div id="e2_inline">
+            <div id="e3_inline">
             </div>
 
             <script>
-                e2TP = new fg.Timepicker({
-                    bindContainer: document.getElementById('e2_inline'),
+                e3TP = new fg.Timepicker({
+                    bindContainer: document.getElementById('e3_inline'),
                     hoursStart: 9,
                     hoursEnd: 20,
                     minutesStart: 30,
@@ -105,15 +113,15 @@
             </script>
         </div>
 
-        <div class="example" id="e3_locale">
+        <div class="example" id="e4_locale">
             <h3>Example in another locale</h3>
 
-            <div id="e3_inline">
+            <div id="e4_inline">
             </div>
 
             <script>
-                e3TP = new fg.Timepicker({
-                    bindContainer: document.getElementById('e3_inline'),
+                e4TP = new fg.Timepicker({
+                    bindContainer: document.getElementById('e4_inline'),
                     locale: 'fr'
                 })
             </script>
