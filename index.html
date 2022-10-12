@@ -83,12 +83,17 @@
 
             <div>
             
-                <input type="checkbox" id="e2_animatePopup" value="false">
+                <input type="checkbox" id="e2_animatePopup" value="false" onClick=e2_setAnimatePopup>
                 <label for="e2_animatePopup">Animate popup</label>
             </div>
             <script>
-                
-                e2TP = new fg.Timepicker({
+                function e2_setAnimatePopup() { 
+                    e2TP.options({
+                        animatePopup: document.getElementById('e2_animatePopup').checked
+                    });
+                }
+                document.getElementById('e2_animatePopup').addEventListener('click', e2_setAnimatePopup);
+                let e2TP = new fg.Timepicker({
                     bindInput: document.getElementById('e2_input'),
                     animatePopup: true
                 });

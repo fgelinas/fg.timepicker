@@ -47,9 +47,9 @@ fg.Timepicker = function Timepicker(options) {
     // init hour and minutes to current time
     let now = new Date();
     // the currently selected hour
-    let hour = options.hour ? options.hour : now.getHours();
+    this.hour = options.hour ? options.hour : now.getHours();
     // the currently selected minute
-    let minute = options.minute ? options.minute : now.getMinutes();
+    this.minute = options.minute ? options.minute : now.getMinutes();
 
     let mainElementClass = "fgtp";
     // TODO: Add parameter for dark theme, which should add the .fgtp-dark to mainElementClass.
@@ -71,33 +71,29 @@ fg.Timepicker = function Timepicker(options) {
      */
     // bindInput is the text box HTMLInputElement bound to the timepicker for value and popup
     let bindInput = options.bindInput ? options.bindInput : null;
-    // define if the timepicker pops up automatically on focus or not
-    let autoPopup = options.autoPopup ? options.autoPopup : true;
-    // TODO: show the timepicker when this button is clicked
-    let bindButton = options.bindButton ? options.bindButton : null;
     // show the timepicker inline in this container
     let bindContainer = options.bindContainer ? options.bindContainer : null;
     // time options 
     // timeSeparator : string that seperate hours and minutes
-    let timeSeparator = options.timeSeparator ? options.timeSeparator : ":"
+    // TODO: Move to locales
+    this.timeSeparator = options.timeSeparator ? options.timeSeparator : ":"
     // showHours
-    let showHours = options.showHours ? options.showHours : true;
+    this.showHours = options.showHours ? options.showHours : true;
     // hoursStart and hoursEnd list available hours 
-    let hoursStart = options.hoursStart ? options.hoursStart : 0;
-    let hoursEnd = options.hoursEnd ? options.hoursEnd : 23;
+    this.hoursStart = options.hoursStart ? options.hoursStart : 0;
+    this.hoursEnd = options.hoursEnd ? options.hoursEnd : 23;
     // minutesStart, minutesEnd and minutesInterval list available minutes
-    let minutesStart = options.minutesStart ? options.minutesStart : 0;
-    let minutesEnd = options.minutesEnd ? options.minutesEnd : 59;
-    let minutesInterval = options.minutesInterval ? options.minutesInterval : 5;
+    this.minutesStart = options.minutesStart ? options.minutesStart : 0;
+    this.minutesEnd = options.minutesEnd ? options.minutesEnd : 59;
+    this.minutesInterval = options.minutesInterval ? options.minutesInterval : 5;
     // showMinutes
-    let showMinutes = options.showMinutes ? options.showMinutes : true;
+    this.showMinutes = options.showMinutes ? options.showMinutes : true;
     // Animation flag, default false
-    let animatePopup = options.animatePopup ? options.animatePopup : false;
+    this.animatePopup = options.animatePopup ? options.animatePopup : false;
 
 
     // Localisation :
-    let locale = options.locale ? options.locale : 'en';
-
+    this.locale = options.locale ? options.locale : 'en';
 
     // events
     // TODO: find a better way to affect all options to the instance object.
@@ -108,32 +104,42 @@ fg.Timepicker = function Timepicker(options) {
     this.onHide = null;
     this.onRedraw = options.onRedraw ? options.onRedraw : null;
 
-
     // internal to keep track of visibility of the timepicker
     let visible = false;
 
+    // the options function is used to update options and parameters of timepicker instance
+    this.options = function options(options) {
+        for (const property in tpInst) {
+            if (options.hasOwnProperty(property)) {
+                tpInst[property] = options[property];
+            }
+        }
+
+        this.redraw();
+    }
+
     // === getter and setters ===
     this.getHour = function getHour() {
-        return hour;
+        return tpInst.hour;
     };
     this.setHour = function setHour(newHour) {
-        hour = newHour;
+        tpInst.hour = newHour;
         hourChangedEvent();
         timeChangedEvent();
     };
 
     this.getMinute = function getMinute() {
-        return minute;
+        return tpInst.minute;
     };
     this.setMinute = function setMinute(newMinute) {
-        minute = newMinute;
+        tpInst.minute = newMinute;
         minuteChangedEvent();
         timeChangedEvent();
     };
 
     this.setTime = function setTime(newHour, newMinute) {
-        hour = newHour;
-        minute = newMinute;
+        tpInst.hour = newHour;
+        tpInst.minute = newMinute;
         hourChangedEvent();
         minuteChangedEvent();
         timeChangedEvent();
@@ -147,7 +153,7 @@ fg.Timepicker = function Timepicker(options) {
      */
 
     this.getFormattedTime = function getFormattedTime() {
-        return this.getHour() + timeSeparator + this.getMinute();
+        return this.getHour() + tpInst.timeSeparator + this.getMinute();
     };
 
     /**
@@ -166,7 +172,7 @@ fg.Timepicker = function Timepicker(options) {
 
 
         // first search for time seperator in string
-        let p = timeVal.indexOf(timeSeparator);
+        let p = timeVal.indexOf(tpInst.timeSeparator);
         // check if time separator found
         if (p != -1) {
             retVal.hour = parseInt(timeVal.substr(0, p), 10);
@@ -174,11 +180,11 @@ fg.Timepicker = function Timepicker(options) {
         }
 
         // check for hours only
-        else if (showHours && !showMinutes) {
+        else if (tpInst.showHours && !tpInst.showMinutes) {
             retVal.hour = parseInt(timeVal, 10);
         }
         // check for minutes only
-        else if (!showHours && showMinutes) {
+        else if (!tpInst.showHours && tpInst.showMinutes) {
             retVal.minute = parseInt(timeVal, 10);
         }
         /*
@@ -198,6 +204,8 @@ fg.Timepicker = function Timepicker(options) {
 
     // force redraw of the timepicker
     this.redraw = function redraw() {
+
+        if (!visible) { return; }
 
         let tpDom = buildTPDom();
 
@@ -222,6 +230,7 @@ fg.Timepicker = function Timepicker(options) {
     this.destroyPopup = function destroyPopup() {
         console.log("removing popupEl");
         popupEl.remove();
+        visible = false;
     }
 
     /**
@@ -287,7 +296,7 @@ fg.Timepicker = function Timepicker(options) {
     this.e = e;
 
     let getLocale = function getLocale(text) {
-        return fg.TPLocales[locale][text];
+        return fg.TPLocales[tpInst.locale][text];
     };
 
     /**
@@ -302,7 +311,7 @@ fg.Timepicker = function Timepicker(options) {
         } else {
             classes += ' popup';
         }
-        if (animatePopup) { classes += ' animatePopup'; }
+        if (tpInst.animatePopup) { classes += ' animatePopup'; }
         let newDomEl = e('div', classes);
 
         // set style position to just below input
@@ -347,7 +356,7 @@ fg.Timepicker = function Timepicker(options) {
             let endHour = firstHour + 11;
             for (let i = firstHour; i <= endHour; i++) {
                 // check if between starts and ends 
-                if (i < hoursStart || i > hoursEnd) { continue; }
+                if (i < tpInst.hoursStart || i > tpInst.hoursEnd) { continue; }
                 let hourUnit = e('div', 'fgtp-hour-unit fgtp-unit', amUnitContainer, i);
                 if (i === 0) {
                     hourUnit.innerText = '12'; // TODO: use 24 for 24hour display
@@ -369,7 +378,7 @@ fg.Timepicker = function Timepicker(options) {
         // empty minute unit array
         domMinuteUnits = [];
 
-        for (let i = minutesStart; i <= minutesEnd; i += minutesInterval) {
+        for (let i = tpInst.minutesStart; i <= tpInst.minutesEnd; i += tpInst.minutesInterval) {
             let minuteUnit = e('div', 'fgtp-minute-unit fgtp-unit', minutesUnitContainer, i.toString());
             minuteUnit.onclick = function () {
                 tpInst.setMinute(i);
@@ -401,6 +410,7 @@ fg.Timepicker = function Timepicker(options) {
         popupEl = tpInst.e('div', 'fgtp');
 
         e.target.parentNode.insertBefore(popupEl, e.target.nextSibling);
+        visible = true;
         tpInst.redraw();
     }
 
@@ -414,6 +424,7 @@ fg.Timepicker = function Timepicker(options) {
     // end of initialisation
     if (bindContainer) {
         bindContainer.appendChild(buildTPDom());
+        visible = true;
         // trigger onshow
         console.log(this.onShow);
         if (this.onShow) { this.onShow.apply(); }
