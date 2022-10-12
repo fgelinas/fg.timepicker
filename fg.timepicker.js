@@ -91,6 +91,8 @@ fg.Timepicker = function Timepicker(options) {
     let minutesInterval = options.minutesInterval ? options.minutesInterval : 5;
     // showMinutes
     let showMinutes = options.showMinutes ? options.showMinutes : true;
+    // Animation flag, default false
+    let animatePopup = options.animatePopup ? options.animatePopup : false;
 
 
     // Localisation :
@@ -300,6 +302,7 @@ fg.Timepicker = function Timepicker(options) {
         } else {
             classes += ' popup';
         }
+        if (animatePopup) { classes += ' animatePopup'; }
         let newDomEl = e('div', classes);
 
         // set style position to just below input
