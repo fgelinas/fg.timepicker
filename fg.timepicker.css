@@ -8,19 +8,24 @@
     justify-content: flex-start;
     align-items: stretch;
     align-content: flex-start;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
     background-color: #fff;
     font-family: inherit;
     font-size: 16px;
     color: #444;
-    animation: fgtp-pop .5s ease-out forwards;
+
     transform-origin: 20% 5%;
+}
+
+.fgtp.popup {
+    animation: fgtp-pop .5s ease-out forwards;
 }
 
 @keyframes fgtp-pop {
     0% {
         transform: scale(0);
     }
+
     100% {
         transform: scale(1.0);
     }
@@ -105,7 +110,7 @@
 }
 
 .fgtp .fgtp-unit:hover {
-    background: rgba(0,0,0,0.05);
+    background: rgba(0, 0, 0, 0.05);
     color: #000;
 }
 
@@ -160,6 +165,6 @@
 }
 
 .fgtp.fgtp-dark .fgtp-unit:hover {
-    background: rgba(255,255,255,0.1);
+    background: rgba(255, 255, 255, 0.1);
     color: #fff;
 }

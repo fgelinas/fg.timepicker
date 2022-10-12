@@ -16,9 +16,29 @@ fg.log = fg.log || function log(log) {
     }
 };
 
+fg.TPLocales = {
+    'en': {
+        'am': 'AM',
+        'pm': 'PM',
+        'hour': 'Hour',
+        'minute': 'Minute',
+        'close': 'Close',
+        'now': 'Now',
+        'unselect': 'Unselect',
+    },
+    'fr': {
+        'am': 'AM',
+        'pm': 'PM',
+        'hour': 'Heure',
+        'minute': 'Minute',
+        'close': 'Fermer',
+        'now': 'Maintenant',
+        'unselect': 'Désélectionner',
+    }
+};
+
 // a basic time object
 fg.Time = function Time(hour, minute) {
-
 };
 
 fg.Timepicker = function Timepicker(options) {
@@ -34,6 +54,8 @@ fg.Timepicker = function Timepicker(options) {
     let mainElementClass = "fgtp";
     // TODO: Add parameter for dark theme, which should add the .fgtp-dark to mainElementClass.
 
+    // pointer to the popup element for popup behavior
+    let popupEl = null;
     // pointer to the dom element build to show the timepicker
     let domEl = null;
 
@@ -60,8 +82,19 @@ fg.Timepicker = function Timepicker(options) {
     let timeSeparator = options.timeSeparator ? options.timeSeparator : ":"
     // showHours
     let showHours = options.showHours ? options.showHours : true;
+    // hoursStart and hoursEnd list available hours 
+    let hoursStart = options.hoursStart ? options.hoursStart : 0;
+    let hoursEnd = options.hoursEnd ? options.hoursEnd : 23;
+    // minutesStart, minutesEnd and minutesInterval list available minutes
+    let minutesStart = options.minutesStart ? options.minutesStart : 0;
+    let minutesEnd = options.minutesEnd ? options.minutesEnd : 59;
+    let minutesInterval = options.minutesInterval ? options.minutesInterval : 5;
     // showMinutes
     let showMinutes = options.showMinutes ? options.showMinutes : true;
+
+
+    // Localisation :
+    let locale = options.locale ? options.locale : 'en';
 
 
     // events
@@ -164,6 +197,24 @@ fg.Timepicker = function Timepicker(options) {
     // force redraw of the timepicker
     this.redraw = function redraw() {
 
+        let tpDom = buildTPDom();
+
+        if (bindInput && !bindContainer) {
+            while (popupEl.firstChild) {
+                //The list is LIVE so it will re-index each call
+                popupEl.removeChild(popupEl.firstChild);
+            }
+            popupEl.appendChild(tpDom);
+        }
+
+        if (bindContainer) {
+            while (bindContainer.firstChild) {
+                //The list is LIVE so it will re-index each call
+                bindContainer.removeChild(bindContainer.firstChild);
+            }
+            bindContainer.appendChild(tpDom);
+        }
+
     }
 
     /**
@@ -226,6 +277,11 @@ fg.Timepicker = function Timepicker(options) {
 
         return e;
     };
+    this.e = e;
+
+    let getLocale = function getLocale(text) {
+        return fg.TPLocales[locale][text];
+    };
 
     /**
      * Build the DOM for the timepicker
@@ -233,14 +289,20 @@ fg.Timepicker = function Timepicker(options) {
      */
     let buildTPDom = function buildTPDom() {
 
-        let newDomEl = e('div', mainElementClass);
+        let classes = mainElementClass;
+        if (bindContainer) {
+            classes += ' inline';
+        } else {
+            classes += ' popup';
+        }
+        let newDomEl = e('div', classes);
 
         let hoursBlock = e('div', 'hours', newDomEl);
 
         let amPmList = ['am', 'pm'];
 
         // todo: make the h4 configurable
-        e('h4', 'fgtp-title', hoursBlock, 'Hours');
+        e('h4', 'fgtp-title', hoursBlock, getLocale('hour'));
 
         // empty dom hour unit array
         domHourUnits = [];
@@ -257,6 +319,8 @@ fg.Timepicker = function Timepicker(options) {
             let firstHour = iAmPm === 0 ? 0 : 12;
             let endHour = firstHour + 11;
             for (let i = firstHour; i <= endHour; i++) {
+                // check if between starts and ends 
+                if (i < hoursStart || i > hoursEnd) { continue; }
                 let hourUnit = e('div', 'fgtp-hour-unit fgtp-unit', amUnitContainer, i);
                 if (i === 0) {
                     hourUnit.innerText = '12'; // TODO: use 24 for 24hour display
@@ -277,11 +341,8 @@ fg.Timepicker = function Timepicker(options) {
 
         // empty minute unit array
         domMinuteUnits = [];
-        // TODO: find a better way to handle minutes to show, more configurable
-        let firstMinute = 0;
-        let endMinute = 55;
-        let step = 5;
-        for (let i = firstMinute; i <= endMinute; i += step) {
+
+        for (let i = minutesStart; i <= minutesEnd; i += minutesInterval) {
             let minuteUnit = e('div', 'fgtp-minute-unit fgtp-unit', minutesUnitContainer, i.toString());
             minuteUnit.onclick = function () {
                 tpInst.setMinute(i);
@@ -305,7 +366,20 @@ fg.Timepicker = function Timepicker(options) {
         tpInst.setTime(newTime.hour, newTime.minute);
     };
 
+    let inputFocusHandle = function (e) {
+        console.log('bindInput got focus');
+        console.log(e);
+        if (bindContainer) { return; }
 
+        // create a new element that will show as a popup 
+        popupEl = tpInst.e('div', 'fgtp');
+        e.parentNode.insertBefore(popupEl, e.nextSibling);
+        tpInst.redraw();
+    }
+
+    let inputBlurHandle = function () {
+        console.log('bindInput blur event');
+    }
 
     // end of initialisation
     if (bindContainer) {
@@ -319,6 +393,8 @@ fg.Timepicker = function Timepicker(options) {
         console.log(bindInput)
 
         bindInput.addEventListener('change', inputChangeHandle);
+        bindInput.addEventListener('focus', inputFocusHandle);
+        bindInput.addEventListener('blur', inputBlurHandle);
     }
 
     return this;
