@@ -1,10 +1,10 @@
 // noinspection JSUnusedAssignment
 /**
- * FG Timepicker 2019 edition
+ * FG Timepicker 2019/2022 edition
  * 
- * I am creating this timepicker script because I feel there is still in 2019 a lack of a good usefull timepicker
+ * I am creating this timepicker script because I feel there is still in 2019-2022 a lack of a good usefull timepicker
  * 
- * The previous one I created was based on jQuery UI. I think it is time we have a library agnostic timepicker
+ * The previous one I created was based on jQuery UI. I think it is time we have a good plugin that have no dependencies.
  * 
  */
 
@@ -47,9 +47,9 @@ fg.Timepicker = function Timepicker(options) {
     // init hour and minutes to current time
     let now = new Date();
     // the currently selected hour
-    this.hour = options.hour ? options.hour : now.getHours();
+    this.hour = now.getHours();
     // the currently selected minute
-    this.minute = options.minute ? options.minute : now.getMinutes();
+    this.minute = now.getMinutes();
 
     let mainElementClass = "fgtp";
     // TODO: Add parameter for dark theme, which should add the .fgtp-dark to mainElementClass.
@@ -76,33 +76,33 @@ fg.Timepicker = function Timepicker(options) {
     // time options 
     // timeSeparator : string that seperate hours and minutes
     // TODO: Move to locales
-    this.timeSeparator = options.timeSeparator ? options.timeSeparator : ":"
+    this.timeSeparator = ":"
     // showHours
-    this.showHours = options.showHours ? options.showHours : true;
+    this.showHours = true;
     // hoursStart and hoursEnd list available hours 
-    this.hoursStart = options.hoursStart ? options.hoursStart : 0;
-    this.hoursEnd = options.hoursEnd ? options.hoursEnd : 23;
+    this.hoursStart = 0;
+    this.hoursEnd = 23;
     // minutesStart, minutesEnd and minutesInterval list available minutes
-    this.minutesStart = options.minutesStart ? options.minutesStart : 0;
-    this.minutesEnd = options.minutesEnd ? options.minutesEnd : 59;
-    this.minutesInterval = options.minutesInterval ? options.minutesInterval : 5;
+    this.minutesStart = 0;
+    this.minutesEnd = 59;
+    this.minutesInterval = 5;
     // showMinutes
-    this.showMinutes = options.showMinutes ? options.showMinutes : true;
+    this.showMinutes = true;
     // Animation flag, default false
-    this.animatePopup = options.animatePopup ? options.animatePopup : false;
+    this.animatePopup = false;
 
 
     // Localisation :
-    this.locale = options.locale ? options.locale : 'en';
+    this.locale = 'en';
 
     // events
     // TODO: find a better way to affect all options to the instance object.
-    this.onHourChange = options.onHourChange ? options.onHourChange : null;
-    this.onMinuteChange = options.onMinuteChange ? options.onMinuteChange : null;
-    this.onTimeChange = options.onTimeChange ? options.onTimeChange : null;
-    this.onShow = options.onShow ? options.onShow : null;
+    this.onHourChange = null;
+    this.onMinuteChange = null;
+    this.onTimeChange = null;
+    this.onShow = null;
     this.onHide = null;
-    this.onRedraw = options.onRedraw ? options.onRedraw : null;
+    this.onRedraw = null;
 
     // internal to keep track of visibility of the timepicker
     let visible = false;
@@ -115,8 +115,13 @@ fg.Timepicker = function Timepicker(options) {
             }
         }
 
-        this.redraw();
+        // only redraw if function exists.  when initialising the timepicker, the function does not yet exists.
+        if (this.hasOwnProperty('redraw')) {
+            this.redraw();
+        }
     }
+    // call the options function to affect init options values to tp instance
+    tpInst.options(options);
 
     // === getter and setters ===
     this.getHour = function getHour() {
