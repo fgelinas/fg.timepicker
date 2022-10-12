@@ -214,7 +214,12 @@ fg.Timepicker = function Timepicker(options) {
             }
             bindContainer.appendChild(tpDom);
         }
+    }
 
+    // hide / destroy the timepicker div element
+    this.destroyPopup = function destroyPopup() {
+        console.log("removing popupEl");
+        popupEl.remove();
     }
 
     /**
@@ -297,6 +302,25 @@ fg.Timepicker = function Timepicker(options) {
         }
         let newDomEl = e('div', classes);
 
+        // set style position to just below input
+        if (!bindContainer) {
+            let top = bindInput.offsetTop + bindInput.offsetHeight;
+            let left = bindInput.offsetLeft;
+            newDomEl.style.position = 'absolute';
+            console.log('top : ' + top + ', left : ' + left);
+            newDomEl.style.left = left + 'px';
+            newDomEl.style.top = top + 'px';
+        }
+
+        // prevent popup closing when clicking inside popup
+        if (!bindContainer) {
+            newDomEl.addEventListener('mousedown', function (e) {
+                e.preventDefault();
+                return false;
+            })
+        }
+
+
         let hoursBlock = e('div', 'hours', newDomEl);
 
         let amPmList = ['am', 'pm'];
@@ -358,7 +382,6 @@ fg.Timepicker = function Timepicker(options) {
     };
 
     let inputChangeHandle = function () {
-        console.log("bindInput text changed to " + bindInput.value);
 
         newTime = tpInst.parseTime(bindInput.value);
         console.log('new Time : ');
@@ -373,12 +396,16 @@ fg.Timepicker = function Timepicker(options) {
 
         // create a new element that will show as a popup 
         popupEl = tpInst.e('div', 'fgtp');
-        e.parentNode.insertBefore(popupEl, e.nextSibling);
+
+        e.target.parentNode.insertBefore(popupEl, e.target.nextSibling);
         tpInst.redraw();
     }
 
-    let inputBlurHandle = function () {
+    let inputBlurHandle = function (e) {
         console.log('bindInput blur event');
+        if (bindContainer) { return; }
+        tpInst.destroyPopup();
+
     }
 
     // end of initialisation
