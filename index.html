@@ -19,32 +19,35 @@
             Why?
         </h2>
         <p>
-            So this is <s>2019</s> <s>2020</s> 2021 and the game has changed but I still feel there is a missing usefull solution
-            for timepickers.
-            I liked my previous one but binding to a framework (jQuery) was a mistake.s
-            Also I'm using this new project for <a href="https://hacktoberfest.digitalocean.com/">Hacktoberfest</a>.
-            This implementation of the timepicker is completely vanilla and has no dependencies.
+            So this is <s>2019</s> <s>2020</s> 2021 and the world is still changing but I still feel there is a missing
+            usefull solution for a simple timepicker control.
+        </p>
+        <p>
+            I liked the first version i wrote some years ago but binding to a framework (jQuery) now feels like it is
+            not the best way.
+        </p>
+        <p>
+            This implementation of the timepicker is <b>completely vanilla and has no dependencies</b>.
         </p>
     </div>
 
     <div id="examples">
-        <h2>Examples</h2>
-
         <div class="example" id="example_1">
             <h3>
-                <small>Example 1</small>
                 Inline Timepicker with Events, linked to textbox by events
             </h3>
-            <div>
-                <input type="text" id="e1_input">
-            </div>
-            <div id="e1_inline" style="float:left">
-            </div>
-
-            <div style="padding: 10px;">
-                <h3>Events : </h3>
-                <div id="e1_events" style="width: 300px; height:150px; overflow-y: scroll">
+            <div style="float: left;">
+                <div>
+                    <input type="text" id="e1_input">
                 </div>
+                <div id="e1_inline">
+                </div>
+            </div>
+            <div style="padding-left: 10px; float: left;">
+                <h3>Events : </h3>
+                <div id="e1_events" style="width: 400px; height:200px; overflow-y: scroll; border: 1px solid grey">
+                </div>
+
             </div>
 
             <script id="e1_script">
@@ -72,8 +75,48 @@
             </script>
         </div>
 
-        <div class="example" id="example_2">
+        <div class="example" id="e4_std_input">
+            <h3>Example with a normal input and display the timepicker in a popup</h3>
 
+            <input type="text" id="e4_input">
+
+            <script>
+                e4TP = new fg.Timepicker({
+                    bindInput: document.getElementById('e4_input')
+                });
+            </script>
+        </div>
+
+        <div class="example" id="e2_custom_start_end">
+            <h3>Example with custom hours and minutes choices</h3>
+
+            <div id="e2_inline">
+            </div>
+
+            <script>
+                e2TP = new fg.Timepicker({
+                    bindContainer: document.getElementById('e2_inline'),
+                    hoursStart: 9,
+                    hoursEnd: 20,
+                    minutesStart: 30,
+                    minutesEnd: 59,
+                    minutesInterval: 2
+                })
+            </script>
+        </div>
+
+        <div class="example" id="e3_locale">
+            <h3>Example in another locale</h3>
+
+            <div id="e3_inline">
+            </div>
+
+            <script>
+                e3TP = new fg.Timepicker({
+                    bindContainer: document.getElementById('e3_inline'),
+                    locale: 'fr'
+                })
+            </script>
         </div>
 
     </div>
